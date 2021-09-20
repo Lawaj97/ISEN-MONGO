@@ -1,3 +1,4 @@
 pymongo
+pymongo[srv]
 request
 json
