@@ -31,17 +31,13 @@ for i in range (0,len(jsonload)):
     jsongeo = jsonloadbis.get("geo")
 
     dictionnaire_stations = { "ville": jsonville, "nom": jsonnom, "adresse": jsonadresse, "etat": jsonetat, "tpe": jsontpe, "geoloc": jsongeo }
-    col_stations.insert_one(dictionnaire_stations)
-    
-    #dictionnaire_infostations = { "ville": "", "nom": "", "taille": "", "dispo": "", "indispo": "", "maj": "" }
+    col_stations.update_one({ "adresse": jsonadresse }, {"$set": dictionnaire_stations}, upsert=True)
 
+    jsonvelodispo = jsonloadbis.get("nbvelosdispo")
+    jsonplacedispo = jsonloadbis.get("nbplacesdispo")
+    jsonmaj = jsonloadbis.get("datemiseajour")
 
+    dictionnaire_infostations = { "nom": jsonnom, "adresse": jsonadresse, "velosdispo": jsonvelodispo, "placesdispo": jsonplacedispo, "maj": jsonmaj }
+    col_infostations.update_one({ "adresse": jsonadresse }, {"$set": dictionnaire_infostations}, upsert=True)
 
-"""
-["ville"]
-["geolocation"]
-["size"]
-["name"]
-["tpe"]
-["available"]
-"""
+#Recherche BULK WRITE, pour gain de temps
