@@ -184,3 +184,5 @@ print("Fin While")
 FIN
 """
 print("!!! Fin !!!")
+
+#Je viens de voir pour l'historique, il faudrait donc enlever les 'replace' par des 'insert', ce qui nous donnera donc l'historique.
