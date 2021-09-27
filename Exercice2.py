@@ -1,7 +1,19 @@
 import pymongo
 import requests
 import json
-import threading
+import time
+
+"""
+Variable
+"""
+updatevar = True
+timevar = time.perf_counter()
+
+
+"""
+Fonctions
+"""
+
 
 
 def get_lille():
@@ -124,9 +136,7 @@ def update_rennes():
 
         dictionnaire_infostations = { "ville": jsonville, "nom": jsonnom, "adresse": jsonadresse, "velosdispo": jsonvelodispo, "placesdispo": jsonplacedispo, "maj": jsonmaj }
         col_infostations.update_one({ "nom": jsonnom }, {"$set": dictionnaire_infostations}, upsert=True)
-
-def robot_update(updatemeplease, howmanytimebetweeneachupdatesir):
-    threading.Timer(howmanytimebetweeneachupdatesir, updatemeplease).start()
+    
 
 """
 Debut
@@ -146,12 +156,29 @@ col_stations = db["stations"]
 col_infostations = db["infostations"]
 
 
+
+
+
 """
 Remplissage ou Mise a jour de la DB
 """
+print("Debut While, CTRL+C pour quitter :")
 
-robot_update(update_rennes(), 60)
+"""
+Robot Update toutes les 300 Secondes
+"""
 
+while (updatevar == True):
+    if (timevar + 300.0 < time.perf_counter()):
+        print('Update Start')
+        update_rennes()
+        update_lille()
+        update_lyon()
+        update_paris()
+        print('! Update Done !')
+        timevar = time.perf_counter()
+
+print("Fin While")
 
 """
 FIN
