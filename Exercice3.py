@@ -20,8 +20,8 @@ longgg = 1.684
 """
 Connexion a mongoDB
 """
-client = pymongo.MongoClient("mongodb+srv://lawaj:P*123456789p@isen-mongo-tp.1lwab.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-#client = pymongo.MongoClient("mongodb://localhost:27017/")
+#client = pymongo.MongoClient("mongodb+srv://lawaj:<PASSWORD>@isen-mongo-tp.1lwab.mongodb.net/ISEN-MONGO-TP?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb://localhost:27017/")
 
 db = client['ISEN-MONGO-TP']
 
@@ -35,13 +35,24 @@ resultat = col_stations.find({"geoloc":{"$near":{"$geometry":{"type":"Point", "c
 for data in resultat:
     print(data)
 
+print("")
+print("")
+print("")
+nearest = col_stations.find_one({"geoloc":{"$near":{"$geometry":{"type":"Point", "coordinates":[ lattt, longgg ]}}}})
+print("La station la plus proche est : ",nearest['nom'],".")
+
+infos = col_infostations.find_one({"nom": nearest['nom']})
+print("Cette station velo dispose de '",infos['placesdispo'],"' places de libres et de '",infos['velosdispo'],"' velos !")
+
+print("")
+print("")
+print("")
+
 """
 FIN
 """
 print("!!! Fin !!!")
 
 """
-Nous avons donc les stations classées de la plus proche à la plus loin, par manque de temps,
-nous n'avons pas eu le temps de comparer les noms de stations avec la deuxieme collection (col_infostations),
-pour resortir le nombre de vélos et de stands disponnibles
+Nous avons donc les stations classées de la plus proche à la plus loin, puis les informations sur la station la plus proche.
 """
